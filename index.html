@@ -7,10 +7,11 @@
 <meta name="description" content="Opens Party Quests on claude.ai.">
 <meta name="theme-color" content="#000000">
 <meta name="robots" content="noindex">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json?v=2">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="pq-icon-192-v2.png" type="image/png" sizes="192x192">
+<link rel="icon" href="pq-icon-512-v2.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="apple-touch-icon-v2.png" sizes="180x180">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Party Quests">
@@ -42,16 +43,22 @@
   .how { width: 100%; text-align: left; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-direction: column; gap: 8px; }
   .how b { color: var(--fg); font-weight: 600; }
   .how p { margin: 0; }
+  /* when Chrome offers to install, installing becomes the main action */
+  .can-install #install { order: -1; border: 0; background: var(--gold); color: #1a1006; font-weight: 700; font-size: 17px; min-height: 48px; padding: 0 28px; }
+  .can-install .open { background: transparent; color: var(--fg); border: 1px solid var(--line); font-weight: 600; font-size: 15px; min-height: 44px; }
+  .actions { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 </style>
 </head>
 <body>
 <main>
-  <img src="icon-512.png" alt="Party Quests icon: white boxer shorts with red hearts" width="168" height="168">
+  <img src="pq-icon-512-v2.png" alt="Party Quests icon: white boxer shorts with red hearts" width="168" height="168">
   <h1>Party Quests</h1>
-  <a class="open" id="open" href="https://claude.ai/artifact/Q7fgxeW7bk9TByqb2j5z1g">Open Party Quests</a>
-  <button id="install" type="button" hidden>Install with this icon</button>
+  <div class="actions">
+    <a class="open" id="open" href="https://claude.ai/artifact/Q7fgxeW7bk9TByqb2j5z1g">Open Party Quests</a>
+    <button id="install" type="button" hidden>Install Party Quests</button>
+  </div>
   <div class="how">
-    <p><b>Android (Chrome):</b> tap ⋮, then <b>Add to home screen</b>, then <b>Install</b>.</p>
+    <p><b>Android (Chrome):</b> install from this page, before tapping Open. Tap ⋮, then <b>Add to home screen</b>, then choose <b>Install</b> (not Create shortcut).</p>
     <p><b>iPhone (Safari):</b> tap Share, then <b>Add to Home Screen</b>.</p>
     <p><b>Windows (Chrome or Edge):</b> click the install icon in the address bar, or ⋮ then <b>Cast, save and share</b> then <b>Install page as app</b>.</p>
   </div>
@@ -59,9 +66,9 @@
 <script>
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
   var prompt_ = null, btn = document.getElementById("install");
-  addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); prompt_ = e; btn.hidden = false; });
-  btn.addEventListener("click", function () { if (prompt_) { prompt_.prompt(); prompt_ = null; btn.hidden = true; } });
-  addEventListener("appinstalled", function () { btn.hidden = true; });
+  addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); prompt_ = e; btn.hidden = false; document.body.classList.add("can-install"); });
+  btn.addEventListener("click", function () { if (prompt_) { prompt_.prompt(); prompt_ = null; btn.hidden = true; document.body.classList.remove("can-install"); } });
+  addEventListener("appinstalled", function () { btn.hidden = true; document.body.classList.remove("can-install"); });
 </script>
 </body>
 </html>
