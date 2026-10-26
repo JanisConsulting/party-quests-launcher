@@ -1,7 +1,7 @@
 {
-  "name": "Party Quests",
-  "short_name": "Party Quests",
-  "description": "Opens Party Quests on claude.ai.",
+  "name": "Guild Hall",
+  "short_name": "Guild Hall",
+  "description": "Opens Guild Hall on claude.ai.",
   "id": "./",
   "start_url": "./?app=1",
   "scope": "./",
